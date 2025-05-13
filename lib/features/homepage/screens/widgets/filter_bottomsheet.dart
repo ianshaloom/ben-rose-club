@@ -1,13 +1,14 @@
-import 'package:benroseclub/core/constants/sizes.dart';
 import 'package:benroseclub/core/widgets/custom_filled_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../../core/constants/image_path_const.dart';
-import '../../../../core/utils/utility_methods.dart';
 import '../../../../theme/text_scheme.dart';
 import '../../controller/counter_a_controller.dart';
+import '../../controller/counter_b_controller.dart';
+import '../../controller/counter_c_controller.dart';
+import '../../controller/data_filter_service.dart';
 
 class FilterBottomsheet extends StatelessWidget {
   const FilterBottomsheet({super.key});
@@ -17,19 +18,19 @@ class FilterBottomsheet extends StatelessWidget {
     return // In your view file
     Column(
       children: [
-        // Display current filter
+        /* // Display current filter
         Obx(
           () =>
-              DateFilterService.to.dateSelected ||
-                      DateFilterService.to.rangeSelected
+              DataFilterService.to.dateSelected ||
+                      DataFilterService.to.rangeSelected
                   ? const SizedBox()
                   : Text(
-                    DateFilterService.to.currentFilterText,
+                    DataFilterService.to.currentFilterText,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
         ),
 
-        const SizedBox(height: 16),
+        const SizedBox(height: 16),*/
 
         // Quick filter buttons
         Obx(() {
@@ -42,13 +43,13 @@ class FilterBottomsheet extends StatelessWidget {
                   // Today button
                   ChoiceChip(
                     label: const Text('Today'),
-                    selected: DateFilterService.to.filterType.value == 'daily',
+                    selected: DataFilterService.to.filterType.value == 'today',
                     onSelected: (selected) {
                       if (selected) {
-                        DateFilterService.to.selectedDate.value =
+                        DataFilterService.to.selectedDate.value =
                             DateTime.now();
-                        DateFilterService.to.filterType.value = 'daily';
-                        DateFilterService.to.dateRange.value = null;
+                        DataFilterService.to.filterType.value = 'today';
+                        DataFilterService.to.dateRange.value = null;
                       }
                     },
                   ),
@@ -57,24 +58,25 @@ class FilterBottomsheet extends StatelessWidget {
                   ChoiceChip(
                     label: const Text('Yesterday'),
                     selected:
-                        DateFilterService.to.filterType.value == 'yesterday',
+                        DataFilterService.to.filterType.value == 'yesterday',
                     onSelected: (selected) {
                       if (selected) {
-                        DateFilterService.to.selectedDate.value = DateTime.now()
+                        DataFilterService.to.selectedDate.value = DateTime.now()
                             .subtract(const Duration(days: 1));
-                        DateFilterService.to.filterType.value = 'yesterday';
-                        DateFilterService.to.dateRange.value = null;
+                        DataFilterService.to.filterType.value = 'yesterday';
+                        DataFilterService.to.dateRange.value = null;
                       }
                     },
                   ),
 
-                  // Last 7 Days button
+                  // Last Week button
                   ChoiceChip(
-                    label: const Text('Last 7 Days'),
-                    selected: DateFilterService.to.filterType.value == 'last7',
+                    label: const Text('This Week'),
+                    selected:
+                        DataFilterService.to.filterType.value == 'this-week',
                     onSelected: (selected) {
                       if (selected) {
-                        DateFilterService.to.setLast7DaysFilter();
+                        DataFilterService.to.setThisWeekFilter();
                       }
                     },
                   ),
@@ -84,24 +86,14 @@ class FilterBottomsheet extends StatelessWidget {
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  // Last 30 Days button
-                  ChoiceChip(
-                    label: const Text('Last 30 Days'),
-                    selected: DateFilterService.to.filterType.value == 'last30',
-                    onSelected: (selected) {
-                      if (selected) {
-                        DateFilterService.to.setLast30DaysFilter();
-                      }
-                    },
-                  ),
-
-                  // Last Week button
+                  // Last 7 Days button
                   ChoiceChip(
                     label: const Text('Last Week'),
-                    selected: DateFilterService.to.filterType.value == 'weekly',
+                    selected:
+                        DataFilterService.to.filterType.value == 'last-week',
                     onSelected: (selected) {
                       if (selected) {
-                        DateFilterService.to.setLastWeekFilter();
+                        DataFilterService.to.setLastWeekFilter();
                       }
                     },
                   ),
@@ -110,10 +102,22 @@ class FilterBottomsheet extends StatelessWidget {
                   ChoiceChip(
                     label: const Text('This Month'),
                     selected:
-                        DateFilterService.to.filterType.value == 'monthly',
+                        DataFilterService.to.filterType.value == 'this-month',
                     onSelected: (selected) {
                       if (selected) {
-                        DateFilterService.to.setCurrentMonthFilter();
+                        DataFilterService.to.setThisMonthFilter();
+                      }
+                    },
+                  ),
+
+                  // Last 30 Days button
+                  ChoiceChip(
+                    label: const Text('Last Month'),
+                    selected:
+                        DataFilterService.to.filterType.value == 'last-month',
+                    onSelected: (selected) {
+                      if (selected) {
+                        DataFilterService.to.setLastMonthFilter();
                       }
                     },
                   ),
@@ -129,52 +133,52 @@ class FilterBottomsheet extends StatelessWidget {
           children: [
             CalendaTile(title: 'Date'),
             const SizedBox(height: 10),
+            Row(
+              children: [
+                const Divider(),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'or',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                const Divider(),
+              ],
+            ),
+            const SizedBox(height: 10),
             CalendaTile(title: 'Date Range'),
           ],
         ),
-
-        /*// Custom Date button
-        CustomFilledBtn(
-          onPressed: () {
-            DateFilterService.to.openDatePicker(context);
-            DateFilterService.to.filterType.value = 'daily';
-            DateFilterService.to.dateRange.value = null;
-          },
-          title: 'Select Date',
-          pad: 10,
-        ),
-        Row(
-          children: [
-            const Divider(),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                'or',
-                style: Theme.of(context).textTheme.bodyLarge,
-                textAlign: TextAlign.center,
-              ),
-            ),
-            const SizedBox(width: 10),
-            const Divider(),
-          ],
-        ),
-
-        // Custom Range button
-
-        CustomFilledBtn(
-          onPressed: () {
-            DateFilterService.to.openDateRangePicker(context);
-            // DateFilterService.to.filterType.value = 'range';
-            // DateFilterService.to.dateRange.value = null;
-          },
-          title: 'Select Date Range',
-          pad: 10,
-        ),*/
+        const SizedBox(height: 10),
+        const Divider(),
         const Spacer(),
 
         // Close button
         CustomFilledBtn(
-          onPressed: () => CounterAController.find.fetchData(),
+          onPressed: () {
+            // close the bottom sheet
+            Navigator.of(context).pop();
+
+            // Call the API with the selected date
+            CounterAController.find.fetchData();
+
+            // check if [CounterBController] and [CounterCController] are
+            // initialized
+            if (Get.isRegistered<CounterBController>()) {
+              CounterBController.find.fetchData();
+            }
+
+            if (Get.isRegistered<CounterCController>()) {
+              CounterCController.find.fetchData();
+            }
+
+            // elese initialize them
+            CounterBController.init();
+            CounterCController.init();
+          },
           title: 'Apply Filter',
           pad: 10,
         ),
@@ -185,36 +189,34 @@ class FilterBottomsheet extends StatelessWidget {
 
 class CalendaTile extends StatelessWidget {
   final String title;
+
   const CalendaTile({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
     final brightness = Theme.of(context).brightness;
-    final color = Theme.of(context).colorScheme.onSurface;
 
     return InkWell(
       onTap: () {
-        _showDatePicker(context);
+        if (title == 'Date') {
+          DataFilterService.to.openDatePicker(context);
+        } else {
+          // Show date range picker
+          DataFilterService.to.openDateRangePicker(context);
+        }
       },
       customBorder: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
         child: Row(
           children: [
             brightness == Brightness.dark
                 ? SvgPicture.asset(calendar, height: 30)
                 : SvgPicture.asset(calendarDark, height: 30),
             const SizedBox(width: 7),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: bodyDefaultBold(textTheme)),
-                _buildDate(title, context),
-              ],
-            ),
+            Expanded(child: _buildDate(title, context)),
           ],
         ),
       ),
@@ -227,6 +229,8 @@ class CalendaTile extends StatelessWidget {
 
     if (title == 'Date') {
       return Container(
+        alignment: Alignment.centerLeft,
+        height: 50,
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
           border: Border.all(color: color.withAlpha(127)),
@@ -234,9 +238,9 @@ class CalendaTile extends StatelessWidget {
         ),
         child: Obx(
           () =>
-              DateFilterService.to.dateSelected
+              DataFilterService.to.dateSelected
                   ? Text(
-                    DateFilterService.to.currentFilterText,
+                    DataFilterService.to.currentFilterText,
                     style: bodyDefault(textTheme).copyWith(color: color),
                   )
                   : Text(
@@ -249,6 +253,8 @@ class CalendaTile extends StatelessWidget {
       );
     } else {
       return Container(
+        alignment: Alignment.centerLeft,
+        height: 50,
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
           border: Border.all(color: color.withAlpha(127)),
@@ -256,9 +262,9 @@ class CalendaTile extends StatelessWidget {
         ),
         child: Obx(
           () =>
-              DateFilterService.to.rangeSelected
+              DataFilterService.to.rangeSelected
                   ? Text(
-                    DateFilterService.to.currentFilterText,
+                    DataFilterService.to.currentFilterText,
                     style: bodyDefault(textTheme).copyWith(color: color),
                   )
                   : Text(

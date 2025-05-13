@@ -7,6 +7,7 @@ import '../../../core/connection/network_info.dart';
 import '../../../core/utils/failure_success/failure_n_success.dart';
 import '../../../core/utils/failure_success/failures.dart';
 import '../../sales/models/transaction.dart';
+import 'data_filter_service.dart';
 
 class CounterBController extends GetxController {
   /// initialize the controller
@@ -49,7 +50,7 @@ class CounterBController extends GetxController {
 
       // get data from API
       await API
-          .counterB(DateFormat('yyyy-MM-dd').format(selectedDate.value))
+          .counterB(queryParameters: DataFilterService.to.queryParams)
           .then((value) {
             value.fold(
               (failure) {

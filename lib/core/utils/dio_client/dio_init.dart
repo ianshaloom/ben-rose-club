@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 class DioInit extends GetxController {
   static DioInit init() => Get.put(DioInit(), permanent: true);
+
   static DioInit get instance => Get.find();
 
   Dio dio(String counter) {
@@ -24,23 +25,23 @@ class DioInit extends GetxController {
   late Dio counterC;
 
   final optionsA = BaseOptions(
-    baseUrl: 'http://localhost:8882',
+    baseUrl: 'https://benroseca.fugitechnologies.com',
     connectTimeout: const Duration(seconds: 10),
-    receiveTimeout: const Duration(seconds: 10),
+    receiveTimeout: const Duration(seconds: 60),
     contentType: 'application/json',
   );
 
   final optionsB = BaseOptions(
     baseUrl: 'https://benrosecb.fugitechnologies.com',
     connectTimeout: const Duration(seconds: 10),
-    receiveTimeout: const Duration(seconds: 10),
+    receiveTimeout: const Duration(seconds: 60),
     contentType: 'application/json',
   );
 
   final optionsC = BaseOptions(
     baseUrl: 'https://benrosecc.fugitechnologies.com',
     connectTimeout: const Duration(seconds: 10),
-    receiveTimeout: const Duration(seconds: 10),
+    receiveTimeout: const Duration(seconds: 60),
     contentType: 'application/json',
   );
 

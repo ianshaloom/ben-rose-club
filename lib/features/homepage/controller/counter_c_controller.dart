@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 import '../../../core/api/benroseclub_api.dart';
 import '../../../core/connection/network_info.dart';
 import '../../../core/utils/failure_success/failure_n_success.dart';
 import '../../../core/utils/failure_success/failures.dart';
 import '../../sales/models/transaction.dart';
+import 'data_filter_service.dart';
 
 class CounterCController extends GetxController {
   /// initialize the controller
@@ -49,7 +49,7 @@ class CounterCController extends GetxController {
 
       // get data from API
       await API
-          .counterC(DateFormat('yyyy-MM-dd').format(selectedDate.value))
+          .counterC(queryParameters: DataFilterService.to.queryParams)
           .then((value) {
             value.fold(
               (failure) {

@@ -8,26 +8,16 @@ import '../utils/failure_success/failures.dart';
 
 class API {
   /// Get data
-  static Future<Either<Failure, List<Transaction>>> counterA(
-    String date, {
-    required String filterType,
-    String? startDate,
-    String? endDate,
+  static Future<Either<Failure, List<Transaction>>> counterA({
+    required Map<String, dynamic> queryParameters,
   }) async {
     // get dio
     final dio = DioInit.instance.dio('A');
 
     try {
-      switch (filterType) {}
-
       final response = await DioHelper.get(
         '/v2/transaction',
-        queryParameters: {
-          'filterType': filterType,
-          'date': date,
-          'startDate': startDate,
-          'endDate': endDate,
-        },
+        queryParameters: queryParameters,
         dio: dio,
       );
 
@@ -46,6 +36,10 @@ class API {
       final List<Transaction> transactions =
           (data).map((e) => Transaction.fromJson(e)).toList();
 
+      transactions.sort((b, a) {
+        return a.dateTime.compareTo(b.dateTime);
+      });
+
       return Right(transactions);
     } catch (e) {
       final errorMessage = e.toString();
@@ -64,16 +58,16 @@ class API {
   }
 
   /// Get data
-  static Future<Either<Failure, List<Transaction>>> counterB(
-    String date,
-  ) async {
+  static Future<Either<Failure, List<Transaction>>> counterB({
+    required Map<String, dynamic> queryParameters,
+  }) async {
     // get dio
     final dio = DioInit.instance.dio('B');
 
     try {
       final response = await DioHelper.get(
         '/v2/transaction',
-        queryParameters: {'date': date},
+        queryParameters: queryParameters,
         dio: dio,
       );
 
@@ -86,10 +80,15 @@ class API {
         return Left(DioFailure(errorMessage: error));
       }
 
-      final data = await response.data;
+      final resp = await response.data;
+      final data = resp['data'] as List;
 
       final List<Transaction> transactions =
-          (data as List).map((e) => Transaction.fromJson(e)).toList();
+          (data).map((e) => Transaction.fromJson(e)).toList();
+
+      transactions.sort((b, a) {
+        return a.dateTime.compareTo(b.dateTime);
+      });
 
       return Right(transactions);
     } catch (e) {
@@ -109,16 +108,16 @@ class API {
   }
 
   /// Get data
-  static Future<Either<Failure, List<Transaction>>> counterC(
-    String date,
-  ) async {
+  static Future<Either<Failure, List<Transaction>>> counterC({
+    required Map<String, dynamic> queryParameters,
+  }) async {
     // get dio
     final dio = DioInit.instance.dio('C');
 
     try {
       final response = await DioHelper.get(
         '/v2/transaction',
-        queryParameters: {'date': date},
+        queryParameters: queryParameters,
         dio: dio,
       );
 
@@ -131,10 +130,15 @@ class API {
         return Left(DioFailure(errorMessage: error));
       }
 
-      final data = await response.data;
+      final resp = await response.data;
+      final data = resp['data'] as List;
 
       final List<Transaction> transactions =
-          (data as List).map((e) => Transaction.fromJson(e)).toList();
+          (data).map((e) => Transaction.fromJson(e)).toList();
+
+      transactions.sort((b, a) {
+        return a.dateTime.compareTo(b.dateTime);
+      });
 
       return Right(transactions);
     } catch (e) {

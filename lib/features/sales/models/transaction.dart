@@ -1,3 +1,5 @@
+
+
 class Transaction {
   final int rno;
   final String rcno;
@@ -8,13 +10,8 @@ class Transaction {
   final DateTime sdate;
   final String stime;
   final double examount;
-  final String ret;
   final String shstatus;
   final String cashier;
-  final String cno;
-  final String cname;
-  final String ref;
-  final double debit;
   final String payvia;
   final String shift;
 
@@ -28,13 +25,8 @@ class Transaction {
     required this.sdate,
     required this.stime,
     required this.examount,
-    required this.ret,
     required this.shstatus,
     required this.cashier,
-    required this.cno,
-    required this.cname,
-    required this.ref,
-    required this.debit,
     required this.payvia,
     required this.shift,
   });
@@ -52,13 +44,8 @@ class Transaction {
       sdate: DateTime.parse(json['sdate'] ?? DateTime.now().toIso8601String()),
       stime: json['stime'] ?? '',
       examount: ((json['examount'] as num?) ?? 0).toDouble(),
-      ret: json['ret'] ?? '',
       shstatus: json['shstatus'] ?? '',
       cashier: json['cashier'] ?? '',
-      cno: json['cno'] ?? '',
-      cname: json['cname'] ?? '',
-      ref: json['ref'] ?? '',
-      debit: ((json['debit'] as num?) ?? 0).toDouble(),
       payvia: json['payvia'] ?? '',
       shift: json['shift'] ?? '',
     );
@@ -75,13 +62,8 @@ class Transaction {
       sdate = DateTime.now(),
       stime = '',
       examount = 0.0,
-      ret = '',
       shstatus = '',
       cashier = '',
-      cno = '',
-      cname = '',
-      ref = '',
-      debit = 0.0,
       payvia = '',
       shift = '';
 
@@ -103,26 +85,19 @@ class Transaction {
 
     return 0;
   }
-}
 
-/*    {
-        "rno": 92034,
-        "rcno": "59970",
-        "cash": 0,
-        "bank": 2500,
-        "tcost": 1506,
-        "user": "Shiku",
-        "sdate": "2025-05-01",
-        "stime": "00:00:50",
-        "examount": 0,
-        "ret": "",
-        "shstatus": "closed",
-        "cashier": "Ronald",
-        "cno": "",
-        "cname": "",
-        "ref": "",
-        "debit": null,
-        "payvia": "BANK",
-        "shift": "30/04/2025 TO 01/05/2025"
-    }
-*/
+  /// DateTime Object from [sdate] and [stime]. [sdate] is in this format
+  /// 2025-05-01 format while [stime] is in this format 12:00 in 24 hour format
+  DateTime get dateTime {
+    final date = DateTime.parse(sdate.toString());
+    final hour = int.parse(stime.split(':')[0]);
+    final minute = int.parse(stime.split(':')[1]);
+    return DateTime(date.year, date.month, date.day, hour, minute);
+  }
+
+  /// toString
+  @override
+  String toString() {
+    return 'Transaction{rno: $rno, rcno: $rcno, cash: $cash, bank: $bank, tcost: $tcost, user: $user, sdate: $sdate, stime: $stime, examount: $examount, shstatus: $shstatus, cashier: $cashier, payvia: $payvia}';
+  }
+}

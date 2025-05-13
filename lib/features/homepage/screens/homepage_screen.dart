@@ -177,7 +177,7 @@ class CounterB extends StatelessWidget {
 
       /// date floating button
       floatingActionButton: FloatingActionButton(
-        onPressed: () => CounterBController.find.openDateicker(context),
+        onPressed: () => CounterAController.find.openFiltersModalSheet(context),
         child: SvgPicture.asset(
           calendarDark,
           height: 35,
@@ -242,7 +242,7 @@ class CounterC extends StatelessWidget {
 
       /// date floating button
       floatingActionButton: FloatingActionButton(
-        onPressed: () => CounterCController.find.openDateicker(context),
+        onPressed: () => CounterAController.find.openFiltersModalSheet(context),
         child: SvgPicture.asset(
           calendarDark,
           height: 35,
