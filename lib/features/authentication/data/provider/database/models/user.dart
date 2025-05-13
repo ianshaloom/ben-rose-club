@@ -1,10 +1,5 @@
-import 'package:isar/isar.dart';
-
 import '../../../../../../core/constants/image_path_const.dart';
 
-part 'user.g.dart';
-
-@Collection()
 class UserIsar {
   const UserIsar({
     required this.id,
@@ -16,7 +11,7 @@ class UserIsar {
     required this.profileImgUrl,
   });
 
-  final Id id;
+  final String id;
   final String uuid;
   final String name;
   final String email;
@@ -25,12 +20,12 @@ class UserIsar {
   final bool isEmailVerified;
 
   static UserIsar get empty => const UserIsar(
-        id: 1,
-        uuid: '',
-        name: '',
-        email: '',
-        isEmailVerified: true,
-        isGoogleSignIn: false,
-        profileImgUrl: defaultProfilePicture,
-      );
+    id: '',
+    uuid: '',
+    name: '',
+    email: '',
+    isEmailVerified: true,
+    isGoogleSignIn: false,
+    profileImgUrl: defaultProfilePicture,
+  );
 }

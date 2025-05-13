@@ -1,12 +1,14 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 import '../../../../core/constants/image_path_const.dart';
 import '../../controller/home_controller.dart';
 
 class CustomNavigationBar extends StatelessWidget {
-  const CustomNavigationBar({super.key});
+  const CustomNavigationBar({super.key,});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,7 @@ class CustomNavigationBar extends StatelessWidget {
     return Obx(
           () => GestureDetector(
         onTap: () {
-          hctrl.setTabIndex(index);
+          // hctrl.setTabIndex(index);
 
           if (index == 0) {
           }
@@ -62,4 +64,4 @@ class CustomNavigationBar extends StatelessWidget {
       ),
     );
   }
-}
+}*/

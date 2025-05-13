@@ -2,28 +2,80 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 
 class DioInit extends GetxController {
+  static DioInit init() => Get.put(DioInit(), permanent: true);
   static DioInit get instance => Get.find();
 
-  final Dio _dio = Dio();
-  Dio get dio => _dio;
-
-  void setBaseUrl(String baseUrl) {
-    _dio.options.baseUrl = baseUrl;
+  Dio dio(String counter) {
+    switch (counter) {
+      case 'A':
+        return counterA;
+      case 'B':
+        return counterB;
+      case 'C':
+        return counterC;
+      default:
+        return counterA;
+    }
   }
+
+  //  Dio Instances
+  late Dio counterA;
+  late Dio counterB;
+  late Dio counterC;
+
+  final optionsA = BaseOptions(
+    baseUrl: 'http://localhost:8882',
+    connectTimeout: const Duration(seconds: 10),
+    receiveTimeout: const Duration(seconds: 10),
+    contentType: 'application/json',
+  );
+
+  final optionsB = BaseOptions(
+    baseUrl: 'https://benrosecb.fugitechnologies.com',
+    connectTimeout: const Duration(seconds: 10),
+    receiveTimeout: const Duration(seconds: 10),
+    contentType: 'application/json',
+  );
+
+  final optionsC = BaseOptions(
+    baseUrl: 'https://benrosecc.fugitechnologies.com',
+    connectTimeout: const Duration(seconds: 10),
+    receiveTimeout: const Duration(seconds: 10),
+    contentType: 'application/json',
+  );
 
   @override
   void onInit() {
-    _dio.options.connectTimeout = Duration(milliseconds: 5000);
-    _dio.options.receiveTimeout = Duration(milliseconds: 30000);
+    counterA = Dio(optionsA);
+    counterA.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          options.validateStatus = (_) => true;
+          return handler.next(options);
+        },
+      ),
+    );
 
-    _dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        options.validateStatus = (_) => true;
-        return handler.next(options);
-      },
-    ));
+    counterB = Dio(optionsB);
+    counterB.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          options.validateStatus = (_) => true;
+          return handler.next(options);
+        },
+      ),
+    );
+
+    counterC = Dio(optionsC);
+    counterC.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          options.validateStatus = (_) => true;
+          return handler.next(options);
+        },
+      ),
+    );
 
     super.onInit();
   }
 }
-

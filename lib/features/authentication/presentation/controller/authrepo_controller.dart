@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import '../../../../core/constants/image_path_const.dart';
 import '../../../../core/utils/utility_methods.dart';
 import '../../core/errors/failures.dart';
-import '../../data/provider/database/crud/user_crud.dart';
 import '../../data/provider/database/models/user.dart';
 import '../../data/provider/network/authentication_ds.dart';
 import '../../data/repository/auth_repo_impl.dart';
@@ -23,8 +22,6 @@ class AuthRepoController extends GetxController {
   final AuthUC authUC;
 
   AuthRepoController(this.authUC);
-
-  final UserCrud userCrud = UserCrud();
 
   // current user
   AuthUser get currentUser => authUC.currentUser;
@@ -130,24 +127,12 @@ class AuthRepoController extends GetxController {
 
   // get local user by id:1
   var userIsars = <UserIsar>[].obs;
-  Future<void> getLocalUser1() async {
-    final user = await userCrud.getUserById(1);
-
-    if (user != null) {
-      userIsars.add(user);
-    }
-  }
-
-  Future<UserIsar> getLocalUser2() async {
-    final user = await userCrud.getUserById(1);
-
-    return user!;
-  }
+  Future<void> getLocalUser1() async {}
 
   // save google user
   Future<UserIsar> saveIsarUser(AuthUser user, bool isGoogleUser) async {
     final isarUser = UserIsar(
-      id: 1,
+      id: user.id,
       uuid: user.id,
       name: user.name ?? extractNameFromEmail(user.email),
       email: currentUser.email,
@@ -155,8 +140,6 @@ class AuthRepoController extends GetxController {
       isGoogleSignIn: isGoogleUser,
       profileImgUrl: user.profileImgUrl ?? defaultProfilePicture,
     );
-
-    await userCrud.insertUser(isarUser);
 
     userIsars.add(isarUser);
 

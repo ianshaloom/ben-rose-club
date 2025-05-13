@@ -2,11 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
 import '../../../core/errors/exception.dart';
 import '../../../domain/entity/auth_user.dart';
-import '../database/crud/user_crud.dart';
 
 class FirebaseAuthentification {
   final firebase_auth.FirebaseAuth _firebaseAuth;
-  final UserCrud userCrud = UserCrud();
 
   AuthUser get currentUser {
     final user = firebase_auth.FirebaseAuth.instance.currentUser;
@@ -120,10 +118,6 @@ class FirebaseAuthentification {
       final firebase_auth.User? user = _firebaseAuth.currentUser;
       if (user != null) {
         await user.delete();
-
-        // delete user info from device
-        final localUser = await userCrud.getUserById(1);
-        await userCrud.deleteUser(localUser!);
       } else {
         throw Exception("Delete Account: The user can't be null.");
       }
@@ -137,10 +131,6 @@ class FirebaseAuthentification {
   Future<void> signOut() async {
     try {
       await _firebaseAuth.signOut();
-
-      // delete user info from device
-      final localUser = await userCrud.getUserById(1);
-      await userCrud.deleteUser(localUser!);
     } on firebase_auth.FirebaseAuthException catch (e) {
       throw AuthenticationException(message: e.code);
     } catch (e) {

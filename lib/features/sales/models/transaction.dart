@@ -46,7 +46,7 @@ class Transaction {
       rno: json['rno'] ?? 0,
       rcno: json['rcno'] ?? '',
       cash: ((json['cash'] as num?) ?? 0).toDouble(),
-      bank:  ((json['bank'] as num?) ?? 0).toDouble(),
+      bank: ((json['bank'] as num?) ?? 0).toDouble(),
       tcost: ((json['tcost'] as num?) ?? 0).toDouble(),
       user: json['user'] ?? '',
       sdate: DateTime.parse(json['sdate'] ?? DateTime.now().toIso8601String()),
@@ -66,32 +66,44 @@ class Transaction {
 
   /// empty constructor
   Transaction.empty()
-      : rno = 0,
-        rcno = '',
-        cash = 0.0,
-        bank = 0.0,
-        tcost = 0.0,
-        user = '',
-        sdate = DateTime.now(),
-        stime = '',
-        examount = 0.0,
-        ret = '',
-        shstatus = '',
-        cashier = '',
-        cno = '',
-        cname = '',
-        ref = '',
-        debit = 0.0,
-        payvia = '',
-        shift = '';
-
+    : rno = 0,
+      rcno = '',
+      cash = 0.0,
+      bank = 0.0,
+      tcost = 0.0,
+      user = '',
+      sdate = DateTime.now(),
+      stime = '',
+      examount = 0.0,
+      ret = '',
+      shstatus = '',
+      cashier = '',
+      cno = '',
+      cname = '',
+      ref = '',
+      debit = 0.0,
+      payvia = '',
+      shift = '';
 
   /// getter
   bool get isCash => payvia == 'CASH';
 
   bool get isBank => payvia == 'BANK';
-}
 
+  bool get payViaEmpty => payvia.isEmpty;
+
+  double get amount {
+    if (cash == 0) {
+      return bank;
+    }
+
+    if (bank == 0) {
+      return cash;
+    }
+
+    return 0;
+  }
+}
 
 /*    {
         "rno": 92034,

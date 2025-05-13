@@ -2,7 +2,6 @@ import 'package:benroseclub/features/homepage/controller/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 class OrganisationButtons extends StatelessWidget {
   const OrganisationButtons({super.key});
 
@@ -13,17 +12,15 @@ class OrganisationButtons extends StatelessWidget {
     final color = Theme.of(context).colorScheme;
     final color1 = color.inverseSurface;
     final color2 = color.primary.withAlpha(77);
-    final font = Theme.of(context).textTheme.bodyMedium;
+    final font = Theme.of(context).textTheme.headlineMedium;
 
     final font1 = font!.copyWith(
-      fontWeight: FontWeight.w700,
+      fontWeight: FontWeight.w900,
       color: color1,
+      letterSpacing: 0.5,
     );
 
-    final font2 = font.copyWith(
-      fontWeight: FontWeight.w700,
-      color: color2,
-    );
+    final font2 = font.copyWith(fontWeight: FontWeight.w600, color: color2);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 15, top: 15),
@@ -39,9 +36,7 @@ class OrganisationButtons extends StatelessWidget {
                 style: ctrl.counterIndex.value == 0 ? font1 : font2,
               ),
             ),
-            const SizedBox(
-              width: 10,
-            ),
+            const SizedBox(width: 10),
             GestureDetector(
               onTap: () => ctrl.setCounterIndex(1),
               child: Text(
@@ -49,9 +44,7 @@ class OrganisationButtons extends StatelessWidget {
                 style: ctrl.counterIndex.value == 1 ? font1 : font2,
               ),
             ),
-            const SizedBox(
-              width: 10,
-            ),
+            const SizedBox(width: 10),
             GestureDetector(
               onTap: () => ctrl.setCounterIndex(2),
               child: Text(

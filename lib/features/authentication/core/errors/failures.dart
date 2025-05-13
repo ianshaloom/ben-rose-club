@@ -4,6 +4,5 @@ abstract class Failure {
 }
 
 class AuthFailure extends Failure {
-  AuthFailure({required String errorMessage})
-      : super(errorMessage: errorMessage);
+  AuthFailure({required super.errorMessage});
 }

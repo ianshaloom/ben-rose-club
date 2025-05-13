@@ -4,6 +4,5 @@ abstract class Success {
 }
 
 class AuthSuccess extends Success {
-  AuthSuccess({required String successContent})
-      : super(successContent: successContent);
+  AuthSuccess({required super.successContent});
 }

@@ -12,9 +12,7 @@ import '../widgets/custom_textfields.dart';
 // SECTION: Register Page
 /* -------------------------------------------------------------------------- */
 class SignUpPage extends StatelessWidget {
-  SignUpPage({
-    super.key,
-  });
+  SignUpPage({super.key});
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController fullNameController = TextEditingController();
@@ -42,28 +40,24 @@ class SignUpPage extends StatelessWidget {
               },
             ),
             bottom: PreferredSize(
-              preferredSize:
-                  const Size.fromHeight(30.0), // Set your desired height
+              preferredSize: const Size.fromHeight(
+                30.0,
+              ), // Set your desired height
               child: Container(
-                margin: const EdgeInsets.only(
-                  left: 16,
-                ),
+                margin: const EdgeInsets.only(left: 16),
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Please enter your details.',
-                  style: bodyDefault(textTheme).copyWith(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: bodyDefault(
+                    textTheme,
+                  ).copyWith(fontSize: 13, fontWeight: FontWeight.w500),
                 ),
               ),
             ),
           ),
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-            sliver: SliverToBoxAdapter(
-              child: _buildRegisterForm(context),
-            ),
+            sliver: SliverToBoxAdapter(child: _buildRegisterForm(context)),
           ),
         ],
       ),
@@ -130,10 +124,7 @@ class SignUpPage extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                TextSpan(
-                  text: ' and ',
-                  style: textTheme.labelMedium,
-                ),
+                TextSpan(text: ' and ', style: textTheme.labelMedium),
                 TextSpan(
                   text: 'Privacy Policy.*',
                   style: textTheme.labelMedium!.copyWith(
@@ -143,31 +134,12 @@ class SignUpPage extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 70),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Expanded(
-                child: Divider(),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Text(
-                  'or continue with',
-                  style: bodyDefault(textTheme),
-                ),
-              ),
-              const Expanded(
-                child: Divider(),
-              ),
-            ],
-          ),
         ],
       ),
     );
   }
 
-/* -------------------------- Sign Up Page Members ------------------------- */
+  /* -------------------------- Sign Up Page Members ------------------------- */
   Future _signUp(
     BuildContext context,
     String fullname,
@@ -180,16 +152,17 @@ class SignUpPage extends StatelessWidget {
       barrierColor: Colors.black.withAlpha(127),
       context: context,
       barrierDismissible: false,
-      builder: (_) => Center(
-        child: SizedBox(
-          height: 75,
-          width: 75,
-          child: CircularProgressIndicator(
-            color: color.surface,
-            backgroundColor: Theme.of(context).colorScheme.primary,
+      builder:
+          (_) => Center(
+            child: SizedBox(
+              height: 75,
+              width: 75,
+              child: CircularProgressIndicator(
+                color: color.surface,
+                backgroundColor: Theme.of(context).colorScheme.primary,
+              ),
+            ),
           ),
-        ),
-      ),
     );
 
     await controller.createUser(

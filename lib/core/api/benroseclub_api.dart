@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 
+import '../../features/sales/models/transaction.dart';
 import '../utils/dio_client/dio_helper.dart';
 import '../utils/dio_client/dio_init.dart';
 import '../utils/failure_success/failure_n_success.dart';
@@ -7,16 +8,27 @@ import '../utils/failure_success/failures.dart';
 
 class API {
   /// Get data
-  static Future<Either<Failure, Map<String, dynamic>>> counterA(
-    String date,
-  ) async {
-    // change the base url
-    DioInit.instance.setBaseUrl('http://192.168.0.103:8882');
+  static Future<Either<Failure, List<Transaction>>> counterA(
+    String date, {
+    required String filterType,
+    String? startDate,
+    String? endDate,
+  }) async {
+    // get dio
+    final dio = DioInit.instance.dio('A');
 
     try {
+      switch (filterType) {}
+
       final response = await DioHelper.get(
         '/v2/transaction',
-        queryParameters: {'date': date},
+        queryParameters: {
+          'filterType': filterType,
+          'date': date,
+          'startDate': startDate,
+          'endDate': endDate,
+        },
+        dio: dio,
       );
 
       if (response.statusCode != 200) {
@@ -28,9 +40,13 @@ class API {
         return Left(DioFailure(errorMessage: error));
       }
 
-      final data = await response.data as Map<String, dynamic>;
+      final resp = await response.data;
+      final data = resp['data'] as List;
 
-      return Right(data);
+      final List<Transaction> transactions =
+          (data).map((e) => Transaction.fromJson(e)).toList();
+
+      return Right(transactions);
     } catch (e) {
       final errorMessage = e.toString();
 
@@ -48,16 +64,17 @@ class API {
   }
 
   /// Get data
-  static Future<Either<Failure, Map<String, dynamic>>> counterB(
+  static Future<Either<Failure, List<Transaction>>> counterB(
     String date,
   ) async {
-    // change the base url
-    DioInit.instance.setBaseUrl('http://192.168.0.103:8080');
+    // get dio
+    final dio = DioInit.instance.dio('B');
 
     try {
       final response = await DioHelper.get(
         '/v2/transaction',
         queryParameters: {'date': date},
+        dio: dio,
       );
 
       if (response.statusCode != 200) {
@@ -69,9 +86,12 @@ class API {
         return Left(DioFailure(errorMessage: error));
       }
 
-      final data = await response.data as Map<String, dynamic>;
+      final data = await response.data;
 
-      return Right(data);
+      final List<Transaction> transactions =
+          (data as List).map((e) => Transaction.fromJson(e)).toList();
+
+      return Right(transactions);
     } catch (e) {
       final errorMessage = e.toString();
 
@@ -89,16 +109,17 @@ class API {
   }
 
   /// Get data
-  static Future<Either<Failure, Map<String, dynamic>>> counterC(
+  static Future<Either<Failure, List<Transaction>>> counterC(
     String date,
   ) async {
-    // change the base url
-    DioInit.instance.setBaseUrl('http://192.168.0.103:8080');
+    // get dio
+    final dio = DioInit.instance.dio('C');
 
     try {
       final response = await DioHelper.get(
         '/v2/transaction',
         queryParameters: {'date': date},
+        dio: dio,
       );
 
       if (response.statusCode != 200) {
@@ -110,9 +131,12 @@ class API {
         return Left(DioFailure(errorMessage: error));
       }
 
-      final data = await response.data as Map<String, dynamic>;
+      final data = await response.data;
 
-      return Right(data);
+      final List<Transaction> transactions =
+          (data as List).map((e) => Transaction.fromJson(e)).toList();
+
+      return Right(transactions);
     } catch (e) {
       final errorMessage = e.toString();
 

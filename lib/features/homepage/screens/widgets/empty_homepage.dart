@@ -1,3 +1,4 @@
+import 'package:benroseclub/core/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shimmer/shimmer.dart';
@@ -15,147 +16,109 @@ class EmptyHomepage extends StatelessWidget {
     final highlightColor = Colors.grey.withAlpha(30);
     return Column(
       children: [
+        // pie chart shimmer effect
         Expanded(
-          child: Stack(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(top: 40),
-                decoration: const BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(40),
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 10, bottom: 5),
-                decoration: BoxDecoration(
-                  color: color.surface,
-                  borderRadius: const BorderRadius.vertical(
-                    bottom: Radius.circular(40),
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    // pie chart shimmer effect
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.35,
-                      width: double.infinity,
-                      padding: const EdgeInsets.only(
-                        top: 35,
-                        left: 35,
-                        right: 35,
-                        bottom: 10,
-                      ),
-                      child: Shimmer.fromColors(
-                        baseColor: baseColor,
-                        highlightColor: highlightColor,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.green,
-                        ),
-                      ),
-                    ),
-
-                    // org switch buttons shimmer effect
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Shimmer.fromColors(
-                            baseColor: baseColor,
-                            highlightColor: highlightColor,
-                            child: Container(
-                              height: 25,
-                              width: 70,
-                              decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            )),
-                        Shimmer.fromColors(
-                            baseColor: baseColor,
-                            highlightColor: highlightColor,
-                            child: Container(
-                              height: 25,
-                              width: 70,
-                              margin: const EdgeInsets.only(left: 10),
-                              decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            )),
-                        Shimmer.fromColors(
-                            baseColor: baseColor,
-                            highlightColor: highlightColor,
-                            child: Container(
-                              height: 25,
-                              width: 70,
-                              margin: const EdgeInsets.only(left: 10),
-                              decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            )),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-
-                    // List view shimmer effect
-                    Flexible(
-                      fit: FlexFit.loose,
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: color.surfaceBright,
-                          borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(40),
-                              bottom: Radius.circular(30)),
-                          // top box shadow
-                          boxShadow: [
-                            BoxShadow(
-                              color: color.primary.withAlpha(13),
-                              offset: const Offset(0, -5),
-                              blurRadius: 10,
-                            ),
-                          ],
-                        ),
-
-                        // list view shimmer effect
+          child: Container(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
                         child: Shimmer.fromColors(
                           baseColor: baseColor,
                           highlightColor: highlightColor,
-                          child: ListView.builder(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            itemCount: 3,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                height: 120,
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                  vertical: 10,
-                                ),
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: color.surface,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              );
-                            },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: TSizes.spaceBtwItems),
+                      Expanded(
+                        flex: 1,
+                        child: Shimmer.fromColors(
+                          baseColor: baseColor,
+                          highlightColor: highlightColor,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(height: TSizes.spaceBtwItems),
+                Expanded(
+                  child: Shimmer.fromColors(
+                    baseColor: baseColor,
+                    highlightColor: highlightColor,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                    ),
+                  ),
+                  flex: 1,
+                ),
+                /*Shimmer.fromColors(
+                  baseColor: baseColor,
+                  highlightColor: highlightColor,
+                  child: ,
+                ),*/
+              ],
+            ),
           ),
         ),
-        const EmptyNavigationBar(),
+
+        // List view shimmer effect
+        Expanded(
+          flex: 3,
+          child: SizedBox(
+            width: double.infinity,
+
+            // list view shimmer effect
+            child: Shimmer.fromColors(
+              baseColor: baseColor,
+              highlightColor: highlightColor,
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                itemCount: 7,
+                itemBuilder: (context, index) {
+                  return Container(
+                    height: 80,
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: color.surface,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
 }
-
 
 class EmptyNavigationBar extends StatelessWidget {
   const EmptyNavigationBar({super.key});
@@ -175,12 +138,7 @@ class EmptyNavigationBar extends StatelessWidget {
     );
   }
 
-  Widget _navItem(
-      int index,
-      String icon,
-      String label,
-      BuildContext context,
-      ) {
+  Widget _navItem(int index, String icon, String label, BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
       decoration: BoxDecoration(
@@ -190,10 +148,7 @@ class EmptyNavigationBar extends StatelessWidget {
       child: SvgPicture.asset(
         icon,
         height: 30,
-        colorFilter: ColorFilter.mode(
-          Colors.grey,
-          BlendMode.srcIn,
-        ),
+        colorFilter: ColorFilter.mode(Colors.grey, BlendMode.srcIn),
       ),
     );
   }

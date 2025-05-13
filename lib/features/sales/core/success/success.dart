@@ -4,11 +4,9 @@ abstract class Success {
 }
 
 class ServerSuccess extends Success {
-  ServerSuccess({required Map<String, dynamic> successContent})
-      : super(successContent: successContent);
+  ServerSuccess({required super.successContent});
 }
 
 class CacheSuccess extends Success {
-  CacheSuccess({required Map<String, dynamic> successContent})
-      : super(successContent: successContent);
+  CacheSuccess({required super.successContent});
 }
