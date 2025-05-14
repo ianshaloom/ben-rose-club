@@ -137,9 +137,9 @@ class DataFilterService extends GetxService {
       case 'last-month':
         return 'Last Month: ${DateFormat('MMM d').format(dateRange.value!.start)} - ${DateFormat('MMM d, y').format(dateRange.value!.end)}';
       case 'this-date':
-        return 'Custom Date: ${DateFormat('MMM d, y').format(selectedDate.value)}';
+        return 'On ${DateFormat('MMM d, y').format(selectedDate.value)}';
       case 'range':
-        return 'Custom Date Range: ${DateFormat('MMM d').format(dateRange.value!.start)} - ${DateFormat('MMM d, y').format(dateRange.value!.end)}';
+        return 'Between ${DateFormat('MMM d').format(dateRange.value!.start)} - ${DateFormat('MMM d, y').format(dateRange.value!.end)}';
       default:
         return 'Today: ${DateFormat('MMM d, y').format(selectedDate.value)}';
     }
