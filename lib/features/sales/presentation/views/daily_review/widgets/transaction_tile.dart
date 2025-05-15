@@ -27,10 +27,9 @@ class TransactionTile extends StatelessWidget {
               top: 0,
               child: Text(
                 elapsedTime(transaction.sdate, transaction.stime),
-                style: bodyDefault(font).copyWith(
-                  color: color.onSurface.withOpacity(0.3),
-                  fontSize: 11,
-                ),
+                style: bodyDefault(
+                  font,
+                ).copyWith(color: color.onSurface.withAlpha(77), fontSize: 11),
               ),
             ),
             Positioned(
@@ -50,7 +49,7 @@ class TransactionTile extends StatelessWidget {
                     Text(
                       transaction.user,
                       style: bodyDefault(font).copyWith(
-                        color: color.onSurface.withOpacity(0.3),
+                        color: color.onSurface.withAlpha(77),
                         fontSize: 11,
                       ),
                     ),
@@ -64,7 +63,7 @@ class TransactionTile extends StatelessWidget {
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
-                    color: color.onSurface.withOpacity(0.07),
+                    color: color.onSurface.withAlpha(18),
                     width: 0.5,
                   ),
                 ),
@@ -94,7 +93,7 @@ class TransactionTile extends StatelessWidget {
                       NumberFormat('#,##0.00', 'en_US').format(_amount),
                       style: bodyDefaultBold(font).copyWith(
                         fontWeight: FontWeight.w400,
-                        color: color.onSurface.withOpacity(0.7),
+                        color: color.onSurface.withAlpha(179),
                       ),
                     ),
                   ],

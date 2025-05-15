@@ -37,13 +37,11 @@ class _CustomFormTfState extends State<CustomFormTf> {
       keyboardType: widget.isNumber ? TextInputType.number : TextInputType.text,
       autocorrect: false,
       decoration: InputDecoration(
-        labelStyle: bodyDefault(textTheme).copyWith(
-          color: color.onSurface.withOpacity(0.5),
-        ),
+        labelStyle: bodyDefault(
+          textTheme,
+        ).copyWith(color: color.onSurface.withAlpha(127)),
         labelText: widget.labelText,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
       validator: (value) {
         if (widget.needsValidation) {

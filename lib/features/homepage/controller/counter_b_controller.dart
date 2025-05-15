@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 import '../../../core/api/benroseclub_api.dart';
 import '../../../core/connection/network_info.dart';
@@ -105,11 +104,23 @@ class CounterBController extends GetxController {
     netSales = 0.0;
 
     for (var t in transactionList) {
-      cashTransaction += t.cash;
-      bankTransaction += t.bank;
+      // just add the amount to the netSales
+      netSales += t.amount;
+
+      // check if transaction payvia is empty
+      if (t.payViaEmpty) {
+        continue;
+      }
+      // check if transaction is cash
+      if (t.isCash) {
+        cashTransaction += t.cash;
+      }
+      // check if transaction is bank
+      if (t.isBank) {
+        bankTransaction += t.bank;
+      }
     }
 
-    netSales = cashTransaction + bankTransaction;
     return cashTransaction;
   }
 

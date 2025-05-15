@@ -62,6 +62,7 @@ class EmptyHomepage extends StatelessWidget {
                 ),
                 const SizedBox(height: TSizes.spaceBtwItems),
                 Expanded(
+                  flex: 1,
                   child: Shimmer.fromColors(
                     baseColor: baseColor,
                     highlightColor: highlightColor,
@@ -72,7 +73,6 @@ class EmptyHomepage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  flex: 1,
                 ),
                 /*Shimmer.fromColors(
                   baseColor: baseColor,

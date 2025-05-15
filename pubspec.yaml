@@ -62,8 +62,10 @@ dev_dependencies:
   flutter_lints: ^5.0.0
 
 package_rename_config:
+  android:
+    app_name: Benrose Club
   ios:
-    app_name: Ben Rose Club
+    app_name: Benrose Club
 
 # The following section is specific to Flutter packages.
 # The following section is specific to Flutter.

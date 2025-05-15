@@ -18,19 +18,8 @@ class FilterBottomsheet extends StatelessWidget {
     return // In your view file
     Column(
       children: [
-        /* // Display current filter
-        Obx(
-          () =>
-              DataFilterService.to.dateSelected ||
-                      DataFilterService.to.rangeSelected
-                  ? const SizedBox()
-                  : Text(
-                    DataFilterService.to.currentFilterText,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-        ),
-
-        const SizedBox(height: 16),*/
+        Text('Quick Filters'),
+        const SizedBox(height: 10),
 
         // Quick filter buttons
         Obx(() {
@@ -42,7 +31,7 @@ class FilterBottomsheet extends StatelessWidget {
                 children: [
                   // Today button
                   ChoiceChip(
-                    label: const Text('Today'),
+                    label: const Text('Open'),
                     selected: DataFilterService.to.filterType.value == 'today',
                     onSelected: (selected) {
                       if (selected) {
@@ -126,34 +115,24 @@ class FilterBottomsheet extends StatelessWidget {
             ],
           );
         }),
-        const Divider(),
+        Divider(
+          color: Colors.grey.withAlpha(20),
+          height: 20,
+          thickness: 1,
+          indent: 10,
+          endIndent: 10,
+        ),
 
+        Text('Customers Filters'),
+        const SizedBox(height: 10),
         // Custom Date button
         Column(
           children: [
             CalendaTile(title: 'Date'),
             const SizedBox(height: 10),
-            Row(
-              children: [
-                const Divider(),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    'or',
-                    style: Theme.of(context).textTheme.bodyLarge,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                const Divider(),
-              ],
-            ),
-            const SizedBox(height: 10),
             CalendaTile(title: 'Date Range'),
           ],
         ),
-        const SizedBox(height: 10),
-        const Divider(),
         const Spacer(),
 
         // Close button
@@ -213,8 +192,8 @@ class CalendaTile extends StatelessWidget {
         child: Row(
           children: [
             brightness == Brightness.dark
-                ? SvgPicture.asset(calendar, height: 30)
-                : SvgPicture.asset(calendarDark, height: 30),
+                ? SvgPicture.asset(calendar, height: 40)
+                : SvgPicture.asset(calendarDark, height: 40),
             const SizedBox(width: 7),
             Expanded(child: _buildDate(title, context)),
           ],
@@ -239,10 +218,7 @@ class CalendaTile extends StatelessWidget {
         child: Obx(
           () =>
               DataFilterService.to.dateSelected
-                  ? Text(
-                    DataFilterService.to.currentFilterText,
-                    style: bodyDefault(textTheme).copyWith(color: color),
-                  )
+                  ? Text(DataFilterService.to.currentFilterText)
                   : Text(
                     "Choose a Date",
                     style: bodyDefault(
@@ -263,10 +239,7 @@ class CalendaTile extends StatelessWidget {
         child: Obx(
           () =>
               DataFilterService.to.rangeSelected
-                  ? Text(
-                    DataFilterService.to.currentFilterText,
-                    style: bodyDefault(textTheme).copyWith(color: color),
-                  )
+                  ? Text(DataFilterService.to.currentFilterText)
                   : Text(
                     "Select Date Range",
                     style: bodyDefault(
@@ -277,34 +250,4 @@ class CalendaTile extends StatelessWidget {
       );
     }
   }
-
-  Future<void> _showDatePicker(BuildContext context) async {
-    final date = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2020),
-      lastDate: DateTime.now(),
-    );
-
-    if (date != null) {
-      if (title == 'Start Date') {
-        // p.startDate.assign(date);
-
-        // clear the other date filters
-        // _clearDateFilters(p);
-      } else {
-        // p.endDate.assign(date);
-
-        // clear the other date filters
-        // _clearDateFilters(p);
-      }
-    }
-  }
-
-  /*  void _clearDateFilters(IntercessFilterCtrl p) {
-    p.todaysChecked.value = false;
-    p.yesterdayChecked.value = false;
-    p.last7DaysChecked.value = false;
-    p.last30DaysChecked.value = false;
-  }*/
 }
