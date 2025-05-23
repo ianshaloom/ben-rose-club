@@ -1,60 +1,94 @@
+// lib/controllers/auth_repo_controller.dart
+import 'dart:async';
+
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../core/constants/image_path_const.dart';
-import '../../../../core/utils/utility_methods.dart';
+import '../../../session/service/device_session_service.dart';
+import '../../../session/service/session_service.dart';
 import '../../core/errors/failures.dart';
-import '../../data/provider/database/models/user.dart';
 import '../../data/provider/network/authentication_ds.dart';
 import '../../data/repository/auth_repo_impl.dart';
 import '../../domain/entity/auth_user.dart';
 import '../../domain/usecase/auth_usecase.dart';
 
+// 🔽 NEW imports
+
 class AuthRepoController extends GetxController {
-  /// initialize controller
+  /* ──────────────────── existing code ──────────────────── */
+
   static AuthRepoController init() => Get.put(
     AuthRepoController(AuthUC(AuthRepoImpl(FirebaseAuthentification()))),
     permanent: true,
   );
 
-  /// find controller
   static AuthRepoController get find => Get.find<AuthRepoController>();
 
   final AuthUC authUC;
 
   AuthRepoController(this.authUC);
 
-  // current user
-  AuthUser get currentUser => authUC.currentUser;
-
-  // Stream user
-  Stream<AuthUser> get user => authUC.user;
-
-  // is loggin in
+  /* … all your existing reactive fields … */
   var isLoggingIn = false.obs;
   var isSigningUp = false.obs;
-
   var isResettingPassword = false.obs;
   var isLoggingOut = false.obs;
 
-  // log in
+  AuthUser get currentUser => authUC.currentUser;
+
+  Stream<AuthUser> get user => authUC.user;
+
   var loggedInUser = <AuthUser>[].obs;
   var loggedInFailure = <Failure>[].obs;
+  var createdUser = <AuthUser>[].obs;
+  var createdUserFailure = <Failure>[].obs;
+  var resetLinkSent = false.obs;
+  var resetLinkFailure = <Failure>[].obs;
+  var emailVerified = false.obs;
+  var isVerifyingEmail = false.obs;
+  var emailVerificationFailure = <Failure>[].obs;
+
+  /* ──────────────────── new session fields ──────────────────── */
+
+  final SessionService _sessionService = SessionService();
+  String? _deviceId;
+  StreamSubscription<AuthUser>? _userSub;
+
+  /* ──────────────────── lifecycle hook ──────────────────── */
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    // Whenever AuthUC’s user stream emits, verify that this device is allowed.
+    _userSub = authUC.user.listen(_handleUserChanged);
+  }
+
+  @override
+  void onClose() {
+    _userSub?.cancel();
+    super.onClose();
+  }
+
+  /* ──────────────────── public methods (unchanged signatures) ──────────────────── */
+
   Future<void> logIn({required String email, required String password}) async {
     isLoggingIn.value = true;
 
     final userOrFailure = await authUC.logIn(email: email, password: password);
 
-    userOrFailure.fold((failure) => loggedInFailure.add(failure), (user) async {
-      loggedInUser.add(user);
-      await saveIsarUser(user, false);
+    await userOrFailure.fold((failure) async => loggedInFailure.add(failure), (
+      user,
+    ) async {
+      final ok = await _tryRegisterCurrentDevice(uid: user.id);
+      if (ok) {
+        loggedInUser.add(user);
+      }
     });
 
     isLoggingIn.value = false;
   }
 
-  // create user
-  var createdUser = <AuthUser>[].obs;
-  var createdUserFailure = <Failure>[].obs;
   Future<void> createUser({
     required String username,
     required String email,
@@ -71,78 +105,100 @@ class AuthRepoController extends GetxController {
     userOrFailure.fold((failure) => createdUserFailure.add(failure), (
       user,
     ) async {
-      createdUser.add(user);
-      await saveIsarUser(user, false);
+      final ok = await _tryRegisterCurrentDevice(uid: user.id);
+      if (ok) createdUser.add(user);
     });
 
     isSigningUp.value = false;
   }
 
-  // send password reset link
-  var resetLinkSent = false.obs;
-  var resetLinkFailure = <Failure>[].obs;
   Future<void> sendPasswordResetLink({required String email}) async {
     isResettingPassword(false);
 
     final successOrFailure = await authUC.resetPassword(email: email);
-
     successOrFailure.fold(
       (failure) => resetLinkFailure.add(failure),
-      (success) => resetLinkSent(true),
+      (_) => resetLinkSent(true),
     );
   }
 
-  // verify email
-  var emailVerified = false.obs;
-  var isVerifyingEmail = false.obs;
-  var emailVerificationFailure = <Failure>[].obs;
   Future<void> verifyEmail() async {
     isVerifyingEmail.value = true;
-
     final successOrFailure = await authUC.verifyEmail();
-
     successOrFailure.fold(
       (failure) => emailVerificationFailure.add(failure),
-      (success) => {},
+      (_) {},
     );
-
     isVerifyingEmail.value = false;
   }
 
-  // sign out
   Future<void> signOut() async {
+    // 💡 Clear the server-side “activeDeviceId” before logging out
+    final uid = currentUser.uidOrNull;
+    if (uid != null) {
+      await _sessionService.clearSession(uid);
+    }
+
     final successOrFailure = await authUC.signOut();
-
-    successOrFailure.fold(
-      (failure) {
-        // print('Failure: $failure');
-      },
-      (success) {
-        isLoggingOut.value = false;
-        userIsars.clear();
-        // print('Success: ${success.successContent}');
-      },
-    );
+    successOrFailure.fold((_) {}, (_) => isLoggingOut(false));
   }
 
-  // get local user by id:1
-  var userIsars = <UserIsar>[].obs;
-  Future<void> getLocalUser1() async {}
+  /* ──────────────────── private helpers ──────────────────── */
 
-  // save google user
-  Future<UserIsar> saveIsarUser(AuthUser user, bool isGoogleUser) async {
-    final isarUser = UserIsar(
-      id: user.id,
-      uuid: user.id,
-      name: user.name ?? extractNameFromEmail(user.email),
-      email: currentUser.email,
-      isEmailVerified: user.isEmailVerified,
-      isGoogleSignIn: isGoogleUser,
-      profileImgUrl: user.profileImgUrl ?? defaultProfilePicture,
+  /// Called every time the auth stream changes.
+  Future<void> _handleUserChanged(AuthUser user) async {
+    // if (user.isAnonymous) return; // ignore anon sessions
+
+    _deviceId ??= await DeviceService.deviceId;
+    final allowed = await _sessionService.isCurrentDeviceActive(
+      uid: user.id,
+      deviceId: _deviceId!,
     );
 
-    userIsars.add(isarUser);
-
-    return isarUser;
+    if (!allowed) {
+      // Show a blocking dialog then immediately sign the user out
+      await Get.dialog(
+        const AlertDialog(
+          title: Text('Device limit reached'),
+          content: Text(
+            'This account is already active on another device. '
+            'Log out there first, or ask support to clear your sessions.',
+          ),
+        ),
+        barrierDismissible: false,
+      );
+      await signOut();
+    }
   }
+
+  /// Registers this handset as the *only* active device.
+  /// Returns true if successful, false otherwise.
+  Future<bool> _tryRegisterCurrentDevice({required String uid}) async {
+    _deviceId ??= await DeviceService.deviceId;
+    final deviceInfo = await DeviceService.deviceSnapshot;
+
+    try {
+      await _sessionService.registerSession(
+        uid: uid,
+        deviceId: _deviceId!,
+        deviceInfo: deviceInfo,
+      );
+      return true;
+    } on Exception catch (e) {
+      // Convert to your domain-level Failure and surface it
+      loggedInFailure.add(
+        AuthFailure(
+          errorMessage: e.toString(),
+        ), // use whichever Failure ctor you have
+      );
+      // Roll back login state
+      await authUC.signOut();
+      return false;
+    }
+  }
+}
+
+/* ──────────────────── tiny extensions to reduce null noise ──────────────────── */
+extension on AuthUser {
+  String? get uidOrNull => (id.isEmpty) ? null : id;
 }
