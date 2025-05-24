@@ -27,10 +27,7 @@ class TransactionTile extends StatelessWidget {
               top: 0,
               child: Text(
                 elapsedTime(transaction.sdate, transaction.stime),
-                style: font.bodyMedium!.copyWith(
-                  color: color.onSurface.withAlpha(77),
-                  fontSize: 11,
-                ),
+                style: font.bodyMedium!.copyWith(color: color.onSurface.withAlpha(77), fontSize: 11),
               ),
             ),
             Positioned(
@@ -41,18 +38,11 @@ class TransactionTile extends StatelessWidget {
                 padding: const EdgeInsets.all(3),
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.person_2_rounded,
-                      size: 15,
-                      color: color.primary,
-                    ),
+                    Icon(Icons.person_2_rounded, size: 15, color: color.primary),
                     const SizedBox(width: 5),
                     Text(
                       transaction.user,
-                      style: font.bodyMedium!.copyWith(
-                        color: color.onSurface.withAlpha(77),
-                        fontSize: 11,
-                      ),
+                      style: font.bodyMedium!.copyWith(color: color.onSurface.withAlpha(77), fontSize: 11),
                     ),
                   ],
                 ),
@@ -62,12 +52,7 @@ class TransactionTile extends StatelessWidget {
               height: 70,
               // color: Colors.black26,
               decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: color.onSurface.withAlpha(18),
-                    width: 0.5,
-                  ),
-                ),
+                border: Border(bottom: BorderSide(color: color.onSurface.withAlpha(18), width: 0.5)),
               ),
               child: ListTile(
                 contentPadding: EdgeInsets.zero,
@@ -75,38 +60,27 @@ class TransactionTile extends StatelessWidget {
                   backgroundColor:
                       transaction.payViaEmpty
                           ? const Color.fromARGB(197, 197, 221, 243)
-                          : const Color.fromARGB(129, 25, 149, 0),
+                          : const Color.fromARGB(197, 194, 248, 188),
                   radius: 30,
                   child: SvgPicture.asset(
                     transaction.payViaEmpty ? open : closed,
                     height: 43,
                     colorFilter: ColorFilter.mode(
-                      transaction.payViaEmpty
-                          ? color.primary
-                          : const Color.fromARGB(197, 25, 149, 0),
+                      transaction.payViaEmpty ? color.inversePrimary : const Color.fromARGB(197, 27, 117, 4),
                       BlendMode.srcIn,
                     ),
                   ),
                 ),
                 title: Text(
                   '# ${transaction.rcno} ~ ${transaction.payvia.toUpperCase()}',
-                  style: font.bodyMedium!.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: color.onSurface,
-                  ),
+                  style: font.bodyMedium!.copyWith(fontWeight: FontWeight.w600, color: color.onSurface),
                 ),
                 subtitle: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
+                    Text('KES ', style: font.bodyMedium!.copyWith(fontSize: 10)),
                     Text(
-                      'KES ',
-                      style: font.bodyMedium!.copyWith(fontSize: 10),
-                    ),
-                    Text(
-                      NumberFormat(
-                        '#,##0.00',
-                        'en_US',
-                      ).format(transaction.amount),
+                      NumberFormat('#,##0.00', 'en_US').format(transaction.amount),
                       style: font.bodyMedium!.copyWith(
                         fontWeight: FontWeight.w400,
                         color: color.onSurface.withAlpha(179),

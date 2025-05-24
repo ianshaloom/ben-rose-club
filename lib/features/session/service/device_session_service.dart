@@ -20,13 +20,10 @@ class DeviceService {
 
     if (Platform.isAndroid) {
       final info = await _deviceInfo.androidInfo;
-      id = _uuid.v5(Namespace.url.name, '${info.id}${info.serialNumber}');
+      id = _uuid.v5(Namespace.url.value, '${info.id}${info.serialNumber}');
     } else if (Platform.isIOS) {
       final info = await _deviceInfo.iosInfo;
-      id = _uuid.v5(
-        Namespace.url.name,
-        '${info.identifierForVendor}${info.utsname.machine}',
-      );
+      id = _uuid.v5(Namespace.url.value, '${info.identifierForVendor}${info.utsname.machine}');
     } else {
       id = _uuid.v4();
     }
@@ -41,11 +38,7 @@ class DeviceService {
     }
     if (Platform.isIOS) {
       final i = await _deviceInfo.iosInfo;
-      return {
-        'model': i.utsname.machine,
-        'systemName': i.systemName,
-        'systemVersion': i.systemVersion,
-      };
+      return {'model': i.utsname.machine, 'systemName': i.systemName, 'systemVersion': i.systemVersion};
     }
     return {};
   }

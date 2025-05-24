@@ -1,9 +1,9 @@
-const String defaultProfilePicture =
-    'https://ianshaloom.github.io/assets/img/perfil.png';
+const String defaultProfilePicture = 'https://ianshaloom.github.io/assets/img/perfil.png';
 const String mpesaLogo = 'assets/images/mpesa.png';
 
 // svg image path
 const String serverError = 'assets/images/server-error.svg';
+const String session = 'assets/images/session.svg';
 
 //  svg icon path
 const String penD = 'assets/icons/pend.svg';

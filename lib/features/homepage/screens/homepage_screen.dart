@@ -1,12 +1,14 @@
-import 'package:benroseclub/features/homepage/controller/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../core/constants/image_path_const.dart';
+import '../../authentication/presentation/controller/authrepo_controller.dart';
+import '../../session/session_view.dart';
 import '../controller/counter_a_controller.dart';
 import '../controller/counter_b_controller.dart';
 import '../controller/counter_c_controller.dart';
+import '../controller/home_controller.dart';
 import 'view/counter_a/counter_a_view.dart';
 import 'view/counter_b/counter_b_view.dart';
 import 'view/counter_c/counter_c_view.dart';
@@ -30,6 +32,10 @@ class HomepageScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: Obx(() {
+        if (!AuthRepoController.find.sessionAllowed.value) {
+          return const SessionView();
+        }
+
         return AnimatedPageSwitcher(
           index: HomeController.find.counterIndex.value,
           children: const [CounterA(), CounterB(), CounterC()],
@@ -40,11 +46,7 @@ class HomepageScreen extends StatelessWidget {
 }
 
 class AnimatedPageSwitcher extends StatelessWidget {
-  const AnimatedPageSwitcher({
-    super.key,
-    required this.index,
-    required this.children,
-  });
+  const AnimatedPageSwitcher({super.key, required this.index, required this.children});
 
   final int index;
   final List<Widget> children;
@@ -53,9 +55,7 @@ class AnimatedPageSwitcher extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 0),
-      transitionBuilder:
-          (child, animation) =>
-              FadeTransition(opacity: animation, child: child),
+      transitionBuilder: (child, animation) => FadeTransition(opacity: animation, child: child),
       child: children[index],
     );
   }
@@ -116,10 +116,7 @@ class CounterA extends StatelessWidget {
         child: SvgPicture.asset(
           calendarDark,
           height: 35,
-          colorFilter: ColorFilter.mode(
-            Theme.of(context).colorScheme.primary,
-            BlendMode.srcIn,
-          ),
+          colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.primary, BlendMode.srcIn),
         ),
       ),
     );
@@ -181,10 +178,7 @@ class CounterB extends StatelessWidget {
         child: SvgPicture.asset(
           calendarDark,
           height: 35,
-          colorFilter: ColorFilter.mode(
-            Theme.of(context).colorScheme.primary,
-            BlendMode.srcIn,
-          ),
+          colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.primary, BlendMode.srcIn),
         ),
       ),
     );
@@ -246,10 +240,7 @@ class CounterC extends StatelessWidget {
         child: SvgPicture.asset(
           calendarDark,
           height: 35,
-          colorFilter: ColorFilter.mode(
-            Theme.of(context).colorScheme.primary,
-            BlendMode.srcIn,
-          ),
+          colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.primary, BlendMode.srcIn),
         ),
       ),
     );

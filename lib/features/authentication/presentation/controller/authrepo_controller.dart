@@ -1,7 +1,5 @@
-// lib/controllers/auth_repo_controller.dart
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../session/service/device_session_service.dart';
@@ -17,10 +15,8 @@ import '../../domain/usecase/auth_usecase.dart';
 class AuthRepoController extends GetxController {
   /* ──────────────────── existing code ──────────────────── */
 
-  static AuthRepoController init() => Get.put(
-    AuthRepoController(AuthUC(AuthRepoImpl(FirebaseAuthentification()))),
-    permanent: true,
-  );
+  static AuthRepoController init() =>
+      Get.put(AuthRepoController(AuthUC(AuthRepoImpl(FirebaseAuthentification()))), permanent: true);
 
   static AuthRepoController get find => Get.find<AuthRepoController>();
 
@@ -53,6 +49,7 @@ class AuthRepoController extends GetxController {
   final SessionService _sessionService = SessionService();
   String? _deviceId;
   StreamSubscription<AuthUser>? _userSub;
+  var sessionAllowed = true.obs;
 
   /* ──────────────────── lifecycle hook ──────────────────── */
 
@@ -77,9 +74,7 @@ class AuthRepoController extends GetxController {
 
     final userOrFailure = await authUC.logIn(email: email, password: password);
 
-    await userOrFailure.fold((failure) async => loggedInFailure.add(failure), (
-      user,
-    ) async {
+    await userOrFailure.fold((failure) async => loggedInFailure.add(failure), (user) async {
       final ok = await _tryRegisterCurrentDevice(uid: user.id);
       if (ok) {
         loggedInUser.add(user);
@@ -89,22 +84,12 @@ class AuthRepoController extends GetxController {
     isLoggingIn.value = false;
   }
 
-  Future<void> createUser({
-    required String username,
-    required String email,
-    required String password,
-  }) async {
+  Future<void> createUser({required String username, required String email, required String password}) async {
     isSigningUp.value = true;
 
-    final userOrFailure = await authUC.createUser(
-      username: username,
-      email: email,
-      password: password,
-    );
+    final userOrFailure = await authUC.createUser(username: username, email: email, password: password);
 
-    userOrFailure.fold((failure) => createdUserFailure.add(failure), (
-      user,
-    ) async {
+    userOrFailure.fold((failure) => createdUserFailure.add(failure), (user) async {
       final ok = await _tryRegisterCurrentDevice(uid: user.id);
       if (ok) createdUser.add(user);
     });
@@ -116,19 +101,13 @@ class AuthRepoController extends GetxController {
     isResettingPassword(false);
 
     final successOrFailure = await authUC.resetPassword(email: email);
-    successOrFailure.fold(
-      (failure) => resetLinkFailure.add(failure),
-      (_) => resetLinkSent(true),
-    );
+    successOrFailure.fold((failure) => resetLinkFailure.add(failure), (_) => resetLinkSent(true));
   }
 
   Future<void> verifyEmail() async {
     isVerifyingEmail.value = true;
     final successOrFailure = await authUC.verifyEmail();
-    successOrFailure.fold(
-      (failure) => emailVerificationFailure.add(failure),
-      (_) {},
-    );
+    successOrFailure.fold((failure) => emailVerificationFailure.add(failure), (_) {});
     isVerifyingEmail.value = false;
   }
 
@@ -150,16 +129,15 @@ class AuthRepoController extends GetxController {
     // if (user.isAnonymous) return; // ignore anon sessions
 
     _deviceId ??= await DeviceService.deviceId;
-    final allowed = await _sessionService.isCurrentDeviceActive(
-      uid: user.id,
-      deviceId: _deviceId!,
-    );
+    final allowed = await _sessionService.isCurrentDeviceActive(uid: user.id, deviceId: _deviceId!);
 
     if (!allowed) {
-      // Show a blocking dialog then immediately sign the user out
+      // This device is not allowed to use this account
+      sessionAllowed(false);
+      /* // Show a blocking dialog then immediately sign the user out
       await Get.dialog(
         const AlertDialog(
-          title: Text('Device limit reached'),
+          title: Text('Session Mismatch'),
           content: Text(
             'This account is already active on another device. '
             'Log out there first, or ask support to clear your sessions.',
@@ -167,7 +145,7 @@ class AuthRepoController extends GetxController {
         ),
         barrierDismissible: false,
       );
-      await signOut();
+      await signOut();*/
     }
   }
 
@@ -178,18 +156,12 @@ class AuthRepoController extends GetxController {
     final deviceInfo = await DeviceService.deviceSnapshot;
 
     try {
-      await _sessionService.registerSession(
-        uid: uid,
-        deviceId: _deviceId!,
-        deviceInfo: deviceInfo,
-      );
+      await _sessionService.registerSession(uid: uid, deviceId: _deviceId!, deviceInfo: deviceInfo);
       return true;
     } on Exception catch (e) {
       // Convert to your domain-level Failure and surface it
       loggedInFailure.add(
-        AuthFailure(
-          errorMessage: e.toString(),
-        ), // use whichever Failure ctor you have
+        AuthFailure(errorMessage: e.toString()), // use whichever Failure ctor you have
       );
       // Roll back login state
       await authUC.signOut();

@@ -25,11 +25,7 @@ final router = GoRouter(
             ),
           ],
         ),
-        GoRoute(
-          path: RoutePath.signUp.path,
-          name: RoutePath.signUp.name,
-          builder: (context, state) => SignUpPage(),
-        ),
+        GoRoute(path: RoutePath.signUp.path, name: RoutePath.signUp.name, builder: (context, state) => SignUpPage()),
       ],
     ),
   ],
@@ -40,8 +36,7 @@ enum RoutePath {
   signIn(path: 'signin'),
   signUp(path: 'signup'),
   verifyEmail(path: 'email-verified'),
-  forgotPassword(path: 'forgot-password'),
-  ;
+  forgotPassword(path: 'forgot-password');
 
   const RoutePath({required this.path});
   final String path;
