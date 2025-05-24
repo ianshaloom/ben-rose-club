@@ -7,6 +7,7 @@ import '../../../../../../sales/models/transaction.dart';
 
 class TransactionTile extends StatelessWidget {
   final Transaction transaction;
+
   const TransactionTile({super.key, required this.transaction});
 
   @override
@@ -70,9 +71,21 @@ class TransactionTile extends StatelessWidget {
               child: ListTile(
                 contentPadding: EdgeInsets.zero,
                 leading: CircleAvatar(
-                  backgroundColor: const Color.fromARGB(197, 197, 221, 243),
+                  backgroundColor:
+                      transaction.payViaEmpty
+                          ? const Color.fromARGB(197, 197, 221, 243)
+                          : const Color.fromARGB(197, 194, 248, 188),
                   radius: 30,
-                  child: SvgPicture.asset(moneyIn, height: 43),
+                  child: SvgPicture.asset(
+                    transaction.payViaEmpty ? open : closed,
+                    height: 43,
+                    colorFilter: ColorFilter.mode(
+                      transaction.payViaEmpty
+                          ? color.inversePrimary
+                          : const Color.fromARGB(197, 27, 117, 4),
+                      BlendMode.srcIn,
+                    ),
+                  ),
                 ),
                 title: Text(
                   '# ${transaction.rcno} ~ ${transaction.payvia.toUpperCase()}',

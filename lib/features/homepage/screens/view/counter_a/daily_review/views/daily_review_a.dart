@@ -83,7 +83,7 @@ class DailyReviewA extends StatelessWidget {
             ),
           ),
           SliverPadding(
-            padding: const EdgeInsets.only(left: 3, right: 3, top: 10),
+            padding: const EdgeInsets.only(left: 12, right: 12, top: 30),
             sliver: SliverList.builder(
               itemCount: s.transactionList.length,
               itemBuilder: (context, index) {

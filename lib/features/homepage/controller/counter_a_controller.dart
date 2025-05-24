@@ -117,16 +117,21 @@ class CounterAController extends GetxController {
       netSales += t.amount;
 
       // check if transaction payvia is empty
-      if (t.payViaEmpty) {
+      if (t.isCashNBank) {
+        // add to both cash and bank
+        cashTransaction += t.cash;
+        bankTransaction += t.bank;
         continue;
       }
       // check if transaction is cash
       if (t.isCash) {
         cashTransaction += t.cash;
+        continue;
       }
       // check if transaction is bank
       if (t.isBank) {
         bankTransaction += t.bank;
+        continue;
       }
     }
 
