@@ -1,5 +1,3 @@
-
-
 class Transaction {
   final int rno;
   final String rcno;
@@ -72,9 +70,17 @@ class Transaction {
 
   bool get isBank => payvia == 'BANK';
 
+  bool get isCashNBank => payvia == 'CASH AND BANK';
+
+  bool get isCashNBankOrEmpty => payvia == 'CASH AND BANK' || payvia.isEmpty;
+
   bool get payViaEmpty => payvia.isEmpty;
 
   double get amount {
+    if (isCashNBankOrEmpty) {
+      return cash + bank;
+    }
+
     if (cash == 0) {
       return bank;
     }
