@@ -57,6 +57,7 @@ dependencies:
   uuid: ^4.5.1
   shared_preferences: ^2.5.3
   cloud_firestore: ^5.6.8
+  icons_launcher: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -64,21 +65,48 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   build_runner: ^2.4.15
 
+icons_launcher:
+  image_path: "assets/logos/launcher-icon.png"
+  platforms:
+    android:
+      enable: false
+    web:
+      enable: false
+    macos:
+      enable: false
+    linux:
+      enable: false
+    windows:
+        enable: false
+    ios:
+      enable: true
+      image_path: "assets/logos/launcher-icon.png"
+      dark_path: "assets/logos/launcher-icon-dark.png"
+
 package_rename_config:
   ios:
     app_name: Benrose Club
     package_name: io.github.ianshaloom.benroseclub
 
-#flutter_native_splash:
-#  color: "#ffffff"
-#  color_dark: "#000000"
-#  background_image: "assets/logos/splash.png"
-#  android_12:
-#    color: "#ffffff"
-#    color_dark: "#000000"
-#    icon_background_color: "#ffffff"
-#    icon_background_color_dark: "#000000"
-#    image: "assets/logos/splash.png"
+flutter_native_splash:
+  # iOS background colors (light and dark)
+  color_ios: "#ffffff"
+  color_dark_ios: "#000000"
+
+  # iOS background images (light and dark)
+  background_image_ios: "assets/logos/splash.png"
+  background_image_dark_ios: "assets/logos/splash.png"
+
+  # Optional: Maintain default center placement for iOS splash content
+  ios_content_mode: center
+
+  # Optional: Hide the status bar during splash (you can remove this if not needed)
+  fullscreen: true
+
+  # Platform restriction: generate splash screen only for iOS
+  android: false
+  web: false
+
 
 # The following section is specific to Flutter packages.
 # The following section is specific to Flutter.
