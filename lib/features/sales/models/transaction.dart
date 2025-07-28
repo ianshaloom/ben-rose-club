@@ -6,7 +6,7 @@ class Transaction {
   final double tcost;
   final String user;
   final DateTime sdate;
-  final String stime;
+  // final String stime;
   final double examount;
   final String shstatus;
   final String cashier;
@@ -21,7 +21,7 @@ class Transaction {
     required this.tcost,
     required this.user,
     required this.sdate,
-    required this.stime,
+    // required this.stime,
     required this.examount,
     required this.shstatus,
     required this.cashier,
@@ -40,7 +40,7 @@ class Transaction {
       tcost: ((json['tcost'] as num?) ?? 0).toDouble(),
       user: json['user'] ?? '',
       sdate: DateTime.parse(json['sdate'] ?? DateTime.now().toIso8601String()),
-      stime: json['stime'] ?? '',
+      // stime: json['stime'] ?? '',
       examount: ((json['examount'] as num?) ?? 0).toDouble(),
       shstatus: json['shstatus'] ?? '',
       cashier: json['cashier'] ?? '',
@@ -58,7 +58,7 @@ class Transaction {
       tcost = 0.0,
       user = '',
       sdate = DateTime.now(),
-      stime = '',
+      // stime = '',
       examount = 0.0,
       shstatus = '',
       cashier = '',
@@ -96,14 +96,21 @@ class Transaction {
   /// 2025-05-01 format while [stime] is in this format 12:00 in 24 hour format
   DateTime get dateTime {
     final date = DateTime.parse(sdate.toString());
-    final hour = int.parse(stime.split(':')[0]);
-    final minute = int.parse(stime.split(':')[1]);
-    return DateTime(date.year, date.month, date.day, hour, minute);
+
+    return date;
+  }
+
+  String  get stime {
+    final date = DateTime.parse(sdate.toString());
+    return '${date.hour}:${date.minute.toString().padLeft(2, '0')}';
   }
 
   /// toString
   @override
   String toString() {
-    return 'Transaction{rno: $rno, rcno: $rcno, cash: $cash, bank: $bank, tcost: $tcost, user: $user, sdate: $sdate, stime: $stime, examount: $examount, shstatus: $shstatus, cashier: $cashier, payvia: $payvia}';
+    return 'Transaction{rno: $rno, rcno: $rcno, cash: $cash, bank: $bank, '
+    'tcost: $tcost, user: $user, sdate: $sdate,'
+    'examount: $examount, shstatus: $shstatus, cashier: $cashier, '
+    'payvia: $payvia}';
   }
 }

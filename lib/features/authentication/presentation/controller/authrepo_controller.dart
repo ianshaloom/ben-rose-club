@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../session/service/device_session_service.dart';
@@ -78,6 +79,9 @@ class AuthRepoController extends GetxController {
       final ok = await _tryRegisterCurrentDevice(uid: user.id);
       if (ok) {
         loggedInUser.add(user);
+
+        // handle session state
+        sessionAllowed.value = ok;
       }
     });
 
@@ -126,26 +130,16 @@ class AuthRepoController extends GetxController {
 
   /// Called every time the auth stream changes.
   Future<void> _handleUserChanged(AuthUser user) async {
-    // if (user.isAnonymous) return; // ignore anon sessions
+    try {
+      _deviceId ??= await DeviceService.deviceId;
+      final allowed = await _sessionService.isCurrentDeviceActive(uid: user.id, deviceId: _deviceId!);
 
-    _deviceId ??= await DeviceService.deviceId;
-    final allowed = await _sessionService.isCurrentDeviceActive(uid: user.id, deviceId: _deviceId!);
-
-    if (!allowed) {
-      // This device is not allowed to use this account
-      sessionAllowed(false);
-      /* // Show a blocking dialog then immediately sign the user out
-      await Get.dialog(
-        const AlertDialog(
-          title: Text('Session Mismatch'),
-          content: Text(
-            'This account is already active on another device. '
-            'Log out there first, or ask support to clear your sessions.',
-          ),
-        ),
-        barrierDismissible: false,
-      );
-      await signOut();*/
+      if (!allowed) {
+        // This device is not allowed to use this account
+        sessionAllowed(false);
+      }
+    } catch (e) {
+      debugPrint('Error checking session: $e');
     }
   }
 

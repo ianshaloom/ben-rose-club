@@ -28,7 +28,7 @@ class HomepageScreen extends StatelessWidget {
         scrolledUnderElevation: 0,
         automaticallyImplyLeading: false,
         backgroundColor: color.surface,
-        title: const OrganisationButtons(),
+        title: const CounterButtons(),
         centerTitle: true,
       ),
       body: Obx(() {

@@ -25,21 +25,21 @@ class DioInit extends GetxController {
   late Dio counterC;
 
   final optionsA = BaseOptions(
-    baseUrl: 'https://benroseca.fugitechnologies.com',
+    baseUrl: 'https://brca.fugitechnologies.com',
     connectTimeout: const Duration(seconds: 10),
     receiveTimeout: const Duration(seconds: 60),
     contentType: 'application/json',
   );
 
   final optionsB = BaseOptions(
-    baseUrl: 'https://benrosecb.fugitechnologies.com',
+    baseUrl: 'https://brcb.fugitechnologies.com',
     connectTimeout: const Duration(seconds: 10),
     receiveTimeout: const Duration(seconds: 60),
     contentType: 'application/json',
   );
 
   final optionsC = BaseOptions(
-    baseUrl: 'https://benrosecc.fugitechnologies.com',
+    baseUrl: 'https://brcc.fugitechnologies.com',
     connectTimeout: const Duration(seconds: 10),
     receiveTimeout: const Duration(seconds: 60),
     contentType: 'application/json',

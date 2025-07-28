@@ -123,9 +123,9 @@ class FilterBottomsheet extends StatelessWidget {
           endIndent: 10,
         ),
 
-        Text('Customers Filters'),
+        Text('Custom Date Filters'),
         const SizedBox(height: 10),
-        // Custom Date button
+        // Custom Date Filters
         Column(
           children: [
             CalendaTile(title: 'Date'),

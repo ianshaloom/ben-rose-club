@@ -2,8 +2,10 @@ import 'package:benroseclub/features/homepage/controller/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class OrganisationButtons extends StatelessWidget {
-  const OrganisationButtons({super.key});
+import '../../../authentication/presentation/controller/authrepo_controller.dart';
+
+class CounterButtons extends StatelessWidget {
+  const CounterButtons({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +55,17 @@ class OrganisationButtons extends StatelessWidget {
               ),
             ),
             const Spacer(),
+
+            // logout icon button
+            IconButton(
+              onPressed: () {
+                // clear session and sign out
+                Get.find<AuthRepoController>().signOut();
+              },
+              icon: const Icon(Icons.logout),
+              color: color1,
+              tooltip: 'Logout',
+            ),
           ],
         ),
       ),
